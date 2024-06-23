@@ -34,10 +34,10 @@ os.makedirs(temp_dir, exist_ok=True)
 
 # GitHub 文件链接列表
 file_urls = [
-    "https://raw.githubusercontent.com/handsome-hua/estate_streamlit/main/part_aa",
-    "https://raw.githubusercontent.com/handsome-hua/estate_streamlit/main/part_ab",
-    "https://raw.githubusercontent.com/handsome-hua/estate_streamlit/main/part_ac",
-    "https://raw.githubusercontent.com/handsome-hua/estate_streamlit/main/part_ad"
+    "https://raw.githubusercontent.com/handsome-hua/estate_streamlit/master/part_aa",
+    "https://raw.githubusercontent.com/handsome-hua/estate_streamlit/master/part_ab",
+    "https://raw.githubusercontent.com/handsome-hua/estate_streamlit/master/part_ac",
+    "https://raw.githubusercontent.com/handsome-hua/estate_streamlit/master/part_ad"
 ]
 
 # 下载分割文件
