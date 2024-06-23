@@ -1,5 +1,5 @@
-streamlit
-pandas
-Pillow
-scikit-learn
-requests
+streamlit==1.35.0
+pandas==2.0.3
+pillow==10.3.0
+scikit-learn==1.3.2
+requests==2.32.3
