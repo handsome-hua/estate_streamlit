@@ -57,6 +57,11 @@ def download_file_from_google_drive(url, destination):
     else:
         st.error("Failed to download file")
 
+def load_model(filepath):
+    with open(filepath, 'rb') as file:
+        model = pickle.load(file)
+    return model
+  
 # Google Drive 文件链接
 url = "https://drive.google.com/uc?export=download&id=1SJ4pl2OYKwYoq-cuFk13Ho_jBLBPPOb6"
 destination = 'random_forest_model_cut.pkl'
@@ -68,8 +73,7 @@ st.write("Download completed. File saved as random_forest_model_cut.pkl")
 
 # 加载模型
 try:
-    with open(destination, 'rb') as pickle_in:
-        reg = pickle.load(pickle_in)
+    reg = load_model(destination)
     st.write("Model loaded successfully.")
 except Exception as e:
     st.error(f"Failed to load the model: {e}")
