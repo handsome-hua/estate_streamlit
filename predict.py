@@ -1,5 +1,6 @@
 import pandas as pd
 import pickle
+import requests
 from sklearn.preprocessing import StandardScaler
 import streamlit as st
 '''
@@ -46,8 +47,32 @@ import streamlit as st
 11                 level    0.003038
 '''
 df = pd.read_csv("data_last.csv")
-pickle_in = open('https://drive.google.com/file/d/1SJ4pl2OYKwYoq-cuFk13Ho_jBLBPPOb6/view?usp=drive_link', 'rb')
-reg = pickle.load(pickle_in)
+def download_file_from_google_drive(url, destination):
+    response = requests.get(url, stream=True)
+    if response.status_code == 200:
+        with open(destination, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=32768):
+                if chunk:
+                    f.write(chunk)
+    else:
+        st.error("Failed to download file")
+
+# Google Drive 文件链接
+url = "https://drive.google.com/uc?export=download&id=1SJ4pl2OYKwYoq-cuFk13Ho_jBLBPPOb6"
+destination = 'random_forest_model_cut.pkl'
+
+# 下载文件
+st.write("Downloading file...")
+download_file_from_google_drive(url, destination)
+st.write("Download completed. File saved as random_forest_model_cut.pkl")
+
+# 加载模型
+try:
+    with open(destination, 'rb') as pickle_in:
+        reg = pickle.load(pickle_in)
+    st.write("Model loaded successfully.")
+except Exception as e:
+    st.error(f"Failed to load the model: {e}")
 district_codes = {
     '黄埔': 0,
     '徐汇': 1,
