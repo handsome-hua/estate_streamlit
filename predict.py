@@ -34,10 +34,10 @@ os.makedirs(temp_dir, exist_ok=True)
 
 # GitHub 文件链接列表
 file_urls = [
-    "https://raw.githubusercontent.com/handsome-hua/estate_streamlit/master/part_aa",
-    "https://raw.githubusercontent.com/handsome-hua/estate_streamlit/master/part_ab",
-    "https://raw.githubusercontent.com/handsome-hua/estate_streamlit/master/part_ac",
-    "https://raw.githubusercontent.com/handsome-hua/estate_streamlit/master/part_ad"
+    "https://raw.githubusercontent.com/handsome-hua/estate_streamlit/main/part_aa",
+    "https://raw.githubusercontent.com/handsome-hua/estate_streamlit/main/part_ab",
+    "https://raw.githubusercontent.com/handsome-hua/estate_streamlit/main/part_ac",
+    "https://raw.githubusercontent.com/handsome-hua/estate_streamlit/main/part_ad"
 ]
 
 # 下载分割文件
@@ -50,13 +50,14 @@ st.success("All parts downloaded successfully.")
 # 合并并加载模型
 merged_file = "random_forest_model_cut.pkl"
 
-merge_files(temp_dir, merged_file)
-try:
-    global reg  # 确保 reg 变量全局可用
-    reg = load_model(merged_file)
-    st.success("Model merged and loaded successfully.")
-except Exception as e:
-    st.error(f"Failed to load the model: {e}")
+if st.button("Merge and Load Model"):
+    merge_files(temp_dir, merged_file)
+    try:
+        global reg  # 确保 reg 变量全局可用
+        reg = load_model(merged_file)
+        st.success("Model merged and loaded successfully.")
+    except Exception as e:
+        st.error(f"Failed to load the model: {e}")
 
 # 以下部分保持不变，实现你的预测功能
 district_codes = {
@@ -108,10 +109,24 @@ filled_processed_data[columns_to_standardize] = scaler.fit_transform(filled_proc
 def predict_price(input_data):
     global reg  # 确保函数内使用全局变量 reg
     input_df = pd.DataFrame([input_data])
+    
+    # 标准化输入数据
     input_df[columns_to_standardize] = scaler.transform(input_df[columns_to_standardize])
+    
+    # 检查输入数据是否有缺失值
+    if input_df.isnull().any().any():
+        st.error("Input data contains missing values.")
+        return None
+    
     st.write(input_df)
-    prediction = reg.predict(input_df)
-    return prediction[0]
+    
+    # 预测
+    try:
+        prediction = reg.predict(input_df)
+        return prediction[0]
+    except Exception as e:
+        st.error(f"Prediction failed: {e}")
+        return None
 
 def run_random_forest_app():
     st.subheader('Please enter the required details :')
@@ -150,8 +165,9 @@ def run_random_forest_app():
 
     if st.button("Calculate Price"):
         result = predict_price(input_data)
-        formatted_result = "{:,.1f}".format(result)
-        st.success('Total Price: {} '.format(formatted_result))
+        if result is not None:
+            formatted_result = "{:,.1f}".format(result)
+            st.success('Total Price: {} '.format(formatted_result))
 
 if __name__ == '__main__':
     run_random_forest_app()
