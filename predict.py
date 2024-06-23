@@ -46,7 +46,7 @@ import streamlit as st
 11                 level    0.003038
 '''
 df = pd.read_csv("data_last.csv")
-pickle_in = open('random_forest_model_cut.pkl', 'rb')
+pickle_in = open('https://drive.google.com/file/d/1SJ4pl2OYKwYoq-cuFk13Ho_jBLBPPOb6/view?usp=drive_link', 'rb')
 reg = pickle.load(pickle_in)
 district_codes = {
     '黄埔': 0,
