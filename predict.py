@@ -50,14 +50,13 @@ st.success("All parts downloaded successfully.")
 # 合并并加载模型
 merged_file = "random_forest_model_cut.pkl"
 
-if st.button("Merge and Load Model"):
-    merge_files(temp_dir, merged_file)
-    try:
-        global reg  # 确保 reg 变量全局可用
-        reg = load_model(merged_file)
-        st.success("Model merged and loaded successfully.")
-    except Exception as e:
-        st.error(f"Failed to load the model: {e}")
+merge_files(temp_dir, merged_file)
+try:
+    global reg  # 确保 reg 变量全局可用
+    reg = load_model(merged_file)
+    st.success("Model merged and loaded successfully.")
+except Exception as e:
+    st.error(f"Failed to load the model: {e}")
 
 # 以下部分保持不变，实现你的预测功能
 district_codes = {
