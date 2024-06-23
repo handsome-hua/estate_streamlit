@@ -84,7 +84,8 @@ except Exception as e:
 
 # 加载模型
 try:
-    reg = load_model(destination)  # 不需要 global 声明，除非在函数内使用
+    global reg  # 确保 reg 变量全局可用
+    reg = load_model(destination)
     st.write("Model loaded successfully.")
 except Exception as e:
     st.error(f"Failed to load the model: {e}")
