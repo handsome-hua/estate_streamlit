@@ -47,6 +47,7 @@ import streamlit as st
 11                 level    0.003038
 '''
 df = pd.read_csv("data_last.csv")
+# 函数：从 Google Drive 下载文件
 def download_file_from_google_drive(url, destination):
     response = requests.get(url, stream=True)
     if response.status_code == 200:
@@ -57,6 +58,7 @@ def download_file_from_google_drive(url, destination):
     else:
         st.error("Failed to download file")
 
+# 函数：加载模型
 def load_model(filepath):
     with open(filepath, 'rb') as file:
         model = pickle.load(file)
@@ -71,12 +73,24 @@ st.write("Downloading file...")
 download_file_from_google_drive(url, destination)
 st.write("Download completed. File saved as random_forest_model_cut.pkl")
 
+# 检查下载的文件是否是HTML内容
+try:
+    with open(destination, 'r') as file:
+        first_line = file.readline()
+        if first_line.startswith('<'):
+            raise ValueError("Downloaded file is not a valid pickle file, it appears to be an HTML page.")
+except Exception as e:
+    st.error(f"File validation failed: {e}")
+    return
+
 # 加载模型
 try:
+    global reg  # 确保 reg 变量全局可用
     reg = load_model(destination)
     st.write("Model loaded successfully.")
 except Exception as e:
     st.error(f"Failed to load the model: {e}")
+    return
 district_codes = {
     '黄埔': 0,
     '徐汇': 1,
