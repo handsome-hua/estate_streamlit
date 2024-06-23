@@ -47,6 +47,8 @@ import streamlit as st
 11                 level    0.003038
 '''
 df = pd.read_csv("data_last.csv")
+
+# 下载并加载模型的函数
 def download_file_from_google_drive(url, destination):
     response = requests.get(url, stream=True)
     if response.status_code == 200:
@@ -57,19 +59,33 @@ def download_file_from_google_drive(url, destination):
     else:
         st.error("Failed to download file")
 
+def load_model(filepath):
+    with open(filepath, 'rb') as file:
+        model = pickle.load(file)
+    return model
+
 # Google Drive 文件链接
-url = "https://drive.google.com/uc?export=download&id=1SJ4pl2OYKwYoq-cuFk13Ho_jBLBPPOb6"
+url = "https://drive.google.com/uc?export=download&id=1Mj11bsf04trTR5xYJCZ8gLpyMwjvei3p"
 destination = 'random_forest_model_cut.pkl'
 
-# 下载文件
+# 下载模型文件
 st.write("Downloading file...")
 download_file_from_google_drive(url, destination)
 st.write("Download completed. File saved as random_forest_model_cut.pkl")
 
+# 检查下载的文件是否为HTML内容
+try:
+    with open(destination, 'r') as file:
+        first_line = file.readline()
+        if first_line.startswith('<'):
+            raise ValueError("Downloaded file is not a valid pickle file, it appears to be an HTML page.")
+except Exception as e:
+    st.error(f"File validation failed: {e}")
+
 # 加载模型
 try:
-    with open(destination, 'rb') as pickle_in:
-        reg = pickle.load(pickle_in)
+    global reg  # 确保 reg 变量全局可用
+    reg = load_model(destination)
     st.write("Model loaded successfully.")
 except Exception as e:
     st.error(f"Failed to load the model: {e}")
