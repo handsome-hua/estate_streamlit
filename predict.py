@@ -65,7 +65,7 @@ def load_model(filepath):
     return model
 
 # Google Drive 文件链接
-url = "https://drive.google.com/uc?export=download&id=1SJ4pl2OYKwYoq-cuFk13Ho_jBLBPPOb6"
+url = "https://drive.google.com/uc?export=download&id=1Mj11bsf04trTR5xYJCZ8gLpyMwjvei3p"
 destination = 'random_forest_model_cut.pkl'
 
 # 下载模型文件
